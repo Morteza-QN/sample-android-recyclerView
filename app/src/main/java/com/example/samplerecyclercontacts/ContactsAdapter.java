@@ -1,18 +1,22 @@
 package com.example.samplerecyclercontacts;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ContactViewHolder> {
 
-    private String contacts[] = new String[20];
+    private static final String TAG = "ContactsAdapter";
 
-    public ContactsAdapter() {
+    private String[] contacts = new String[20];
+
+    ContactsAdapter() {
         contacts[0]  = "Ruthann Trustrie";
         contacts[1]  = "Peadar Dawtrey";
         contacts[2]  = "Felipe Bradtke";
@@ -39,12 +43,14 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
     @NonNull
     @Override
     public ContactViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        Log.i(TAG, "onCreateViewHolder: ");
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_contact, parent, false);
         return new ContactViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ContactViewHolder holder, int position) {
+        Log.i(TAG, "onBindViewHolder: position=> " + position);
         holder.bindContact(contacts[position]);
     }
 
@@ -53,21 +59,27 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
         return contacts.length;
     }
 
-    public class ContactViewHolder extends RecyclerView.ViewHolder {
+    class ContactViewHolder extends RecyclerView.ViewHolder {
 
         private TextView firstCharacterTv;
         private TextView fullNameTv;
 
-        public ContactViewHolder(@NonNull View itemView) {
+        ContactViewHolder(@NonNull View itemView) {
             super(itemView);
             firstCharacterTv = itemView.findViewById(R.id.tv_contact_firstCharacter);
             fullNameTv       = itemView.findViewById(R.id.tv_contact_fullName);
         }
 
-        public void bindContact(String fullName) {
+        void bindContact(final String fullName) {
 
             fullNameTv.setText(fullName);
             firstCharacterTv.setText(fullName.substring(0, 1));
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(v.getContext(),fullName,Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 }
