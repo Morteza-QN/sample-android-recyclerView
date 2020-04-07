@@ -1,2 +1,2 @@
-# sample--recyclerView
+# sample-recyclerView
 sample code recyclerView (Contacts)
