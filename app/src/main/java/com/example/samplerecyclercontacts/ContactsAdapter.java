@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,9 +16,10 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
     private static final String TAG = "ContactsAdapter";
 
     private ArrayList<String> contacts = new ArrayList<>();
+    private ItemEventListener itemEventListener;
 
-    ContactsAdapter() {
-
+    ContactsAdapter(ItemEventListener itemEventListener) {
+        this.itemEventListener = itemEventListener;
         contacts.add("Ruthann Trustrie");
         contacts.add("Peadar Dawtrey");
         contacts.add("Felipe Bradtke");
@@ -44,8 +44,14 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
     }
 
     public void addContact(String fullName) {
-        contacts.add(0,fullName);
+        contacts.add(0, fullName);
         notifyItemInserted(0);
+    }
+
+    public void updateContact(String fullName, int position) {
+        contacts.set(position, fullName);
+        notifyItemChanged(position);
+
     }
 
     @NonNull
@@ -67,6 +73,10 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
         return contacts.size();
     }
 
+    public interface ItemEventListener {
+        void onItemClick(String fullName, int position);
+    }
+
     class ContactViewHolder extends RecyclerView.ViewHolder {
 
         private TextView firstCharacterTv;
@@ -85,7 +95,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(v.getContext(), fullName, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(v.getContext(), fullName, Toast.LENGTH_SHORT).show();
+                    itemEventListener.onItemClick(fullName, getAdapterPosition());
                 }
             });
         }
