@@ -15,13 +15,14 @@ public class MainActivity extends AppCompatActivity implements ContactsAdapter.I
     private int             editingItemPosition = -1;
     private EditText        fullNameEt;
     private ImageView       addIm;
+    private RecyclerView    recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final RecyclerView recyclerView = findViewById(R.id.rv_main);
+        recyclerView = findViewById(R.id.rv_main);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
         adapter = new ContactsAdapter(this);
         recyclerView.setAdapter(adapter);
@@ -35,6 +36,9 @@ public class MainActivity extends AppCompatActivity implements ContactsAdapter.I
                 String fullNameStr = fullNameEt.getText().toString().trim();
                 if (fullNameStr.length() <= 0) {return;}
                 if (editingItemPosition > -1) {
+                    //recyclerView.scrollToPosition(editingItemPosition);
+
+
                     adapter.updateContact(fullNameStr, editingItemPosition);
                     editingItemPosition = -1;
                     addIm.setImageResource(R.drawable.ic_add_white_24dp);
@@ -51,7 +55,6 @@ public class MainActivity extends AppCompatActivity implements ContactsAdapter.I
 
     @Override
     public void onItemClick(String fullName, int position) {
-
         editingItemPosition = position;
         fullNameEt.setText(fullName);
         addIm.setImageResource(R.drawable.ic_done_white_24dp);

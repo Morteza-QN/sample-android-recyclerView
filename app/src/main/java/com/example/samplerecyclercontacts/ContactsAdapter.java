@@ -99,6 +99,16 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
                     itemEventListener.onItemClick(fullName, getAdapterPosition());
                 }
             });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    contacts.remove(getAdapterPosition());
+                    notifyItemRemoved(getAdapterPosition());
+                    return false;
+
+                }
+            });
         }
     }
 }
