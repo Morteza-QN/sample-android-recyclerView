@@ -6,6 +6,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,14 +23,14 @@ public class MainActivity extends AppCompatActivity implements ContactsAdapter.I
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        fullNameEt   = findViewById(R.id.et_main_input);
+        addIm        = findViewById(R.id.iv_main_add);
         recyclerView = findViewById(R.id.rv_main);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
         adapter = new ContactsAdapter(this);
         recyclerView.setAdapter(adapter);
 
-
-        fullNameEt = findViewById(R.id.et_main_input);
-        addIm      = findViewById(R.id.iv_main_add);
         addIm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -37,8 +38,6 @@ public class MainActivity extends AppCompatActivity implements ContactsAdapter.I
                 if (fullNameStr.length() <= 0) {return;}
                 if (editingItemPosition > -1) {
                     //recyclerView.scrollToPosition(editingItemPosition);
-
-
                     adapter.updateContact(fullNameStr, editingItemPosition);
                     editingItemPosition = -1;
                     addIm.setImageResource(R.drawable.ic_add_white_24dp);
@@ -58,9 +57,7 @@ public class MainActivity extends AppCompatActivity implements ContactsAdapter.I
         editingItemPosition = position;
         fullNameEt.setText(fullName);
         addIm.setImageResource(R.drawable.ic_done_white_24dp);
-
         openKeyboard(fullNameEt);
-
     }
 
     public void hideKeyboard() {
@@ -71,9 +68,8 @@ public class MainActivity extends AppCompatActivity implements ContactsAdapter.I
         }
     }
 
-    public void openKeyboard(EditText editText) {
+    public void openKeyboard(@NonNull EditText editText) {
         editText.requestFocus();
-
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         imm.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
     }
